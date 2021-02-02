@@ -53,10 +53,16 @@
         </a>
         <div id=progress-container><div id=progress></div></div>
         <textarea id=output rows=8></textarea>
+        <script src="https://unpkg.com/wasm-feature-detect/dist/umd/index.js"></script>
         <script type='text/javascript'>
+            var features = ["threads", "bulkMemory", "mutableGlobals", "signExtensions"];
+
+            var featuresSupport = Promise.all(features.map(function (feature) {
+                return wasmFeatureDetect[feature]();
+            }));
+
             var progressContainerElement = document.getElementById('progress-container');
             var progressElement = document.getElementById('progress');
-            var spinnerElement = document.getElementById('spinner');
             var outputElement = document.getElementById('output');
       
             var Module = {
@@ -96,12 +102,11 @@
               },
               totalDependencies: 2,
               monitorRunDependencies: function(left) {
-                  console.log("monitorRunDependencies", left);
                 this.totalDependencies = Math.max(this.totalDependencies, left);
                 Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
               }
             };
-            Module.setStatus('Downloading...');
+
             window.onerror = function(event) {
               // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
               Module.setStatus('Exception thrown, see JavaScript console');
@@ -110,7 +115,27 @@
                 if (text) Module.printErr('[post-exception status] ' + text);
               };
             };
+
+            featuresSupport.then(function (supported) {
+                var missingFeatures = features.filter(function (_, i) {
+                    return !supported[i];
+                });
+                if (missingFeatures.length > 0) {
+                    Module.print("Your browser does not support one or more features required by this demo:");
+                    missingFeatures.forEach(function (feature) {
+                        Module.print(" * " + feature);
+                    });
+                    Module.setStatus(' ');
+                    Module.setStatus('');
+                    return;
+                }
+
+                Module.setStatus('Downloading...');
+                var script = document.createElement("script");
+                script.setAttribute("async", "");
+                script.setAttribute("src", "main.js");
+                document.body.appendChild(script);
+            });
         </script>
-        <script async src=main.js></script>
     </body>
 </html>
