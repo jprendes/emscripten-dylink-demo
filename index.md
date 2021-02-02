@@ -1,6 +1,6 @@
 ## Emscripten dylink and pthread demo
 
-<iframe src="./build/embedded.html" style="width:100%; height: 200px; border: none; resize: vertical;"></iframe>
+<iframe src="./build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical;"></iframe>
 
 ### About
 

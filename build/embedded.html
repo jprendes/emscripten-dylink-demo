@@ -38,21 +38,21 @@
                 width: 100%;
                 margin: 0;
                 border: 0;
-                padding-left: 0;
-                padding-right: 0;
+                padding: 5px;
                 display: block;
                 background-color: #000;
                 color: #fff;
                 font-family: 'Lucida Console',Monaco,monospace;
                 outline: 0;
                 resize: vertical;
+                box-sizing: border-box;
             }
         </style>
     </head>
     <body>
         </a>
         <div id=progress-container><div id=progress></div></div>
-        <textarea id=output rows=8></textarea>
+        <textarea id=output rows=8 spellcheck="false" disabled></textarea>
         <script src="https://unpkg.com/wasm-feature-detect/dist/umd/index.js"></script>
         <script type='text/javascript'>
             var features = ["threads", "bulkMemory", "mutableGlobals", "signExtensions"];
