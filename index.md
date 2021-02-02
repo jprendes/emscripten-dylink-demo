@@ -64,8 +64,8 @@ $ docker run --rm -it --net=host -v "$(pwd)":"/app/" emscripten-dylink
 ```
 
 This will create a docker container with `emsdk 2.0.13`  and pull a patched version of emscripten from `jprendes/emscripten dylink-merged-fixes` that implements some functionalities currently missing from `emscripten-core/emscripten master`. The most important of those changes are:
-* using the same heap for dynamic libraries globals.
-* support for thread local storage.
+* using the same dynamic library globals across all threads.
+* support for thread local storage (required for exceptions, among others).
 
 Then the container will pull a copy of googletest and compile it as a shared library `qtest.so`. Then it will compile the example tests as another shared library `string-compare.so` which depends on `gtest.so`. Finally it will compile an empty file as a main module which will generate `main.(html|js|wasm)` as well as `main.worker.js`.
 
