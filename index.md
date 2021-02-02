@@ -30,6 +30,8 @@ And here is the result, running right in your browser
 
 <iframe src="./build/embedded.html" style="width:100%; height: 25em; border: none; resize: vertical; border-radius: 0.3rem;"></iframe>
 
+<p style="display:flex;flex-direction:column;align-items:flex-end;"><a href="./build/embedded.html" target="_blank">Open in new tab ↗</a></p>
+
 ### About
 
 This demo shows a demo application (a googletest unit test) built using dynamic linking and pthread support in [Emscripten](https://emscripten.org/).
