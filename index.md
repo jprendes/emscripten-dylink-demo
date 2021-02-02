@@ -1,6 +1,33 @@
 ## Emscripten dylink and pthread demo
 
-<iframe src="./build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical;"></iframe>
+Run threaded unit tests in the browser
+
+<span style="font-size: 0.8em">
+
+```c++
+#include <gtest/gtest.h> // googletest header file
+#include <thread>
+
+const char *actualValTrue  = "hello gtest";
+const char *actualValFalse = "hello world";
+const char *expectVal      = "hello gtest";
+
+TEST(StrCompare, CStrEqual) {
+    std::thread([]{
+        EXPECT_STREQ(expectVal, actualValTrue);
+    }).join();
+}
+
+TEST(StrCompare, CStrNotEqual) {
+    std::thread([]{
+        EXPECT_STREQ(expectVal, actualValFalse);
+    }).join();
+}
+```
+
+</span>
+
+<iframe src="http://localhost:8080/build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical;"></iframe>
 
 ### About
 
@@ -16,13 +43,13 @@ Finally, an empty file is built as Emscripten's main module, which hosts the sys
 
 Get the source
 
-```
+```bash
 $ git clone https://github.com/jprendes/emscripten-dylink-demo.git
 ```
 
 Then run the following commands to build the demo and launch it in a local web server.
 
-```
+```bash
 $ docker build -t emscripten-dylink .
 $ docker run --rm -it --net=host -v "$(pwd)":"/app/" emscripten-dylink
 ```
