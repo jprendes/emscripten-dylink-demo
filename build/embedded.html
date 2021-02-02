@@ -89,7 +89,7 @@
                   progressElement.style.width = (100 * parseInt(m[2]) / parseInt(m[4])) + "%";
                   progressContainerElement.style.display = 'block';
                 } else {
-                  if (!text) progressElement.style.width = '0';
+                  if (!text) progressContainerElement.style.display = 'none';
                 }
                 Module.print(text);
               },
