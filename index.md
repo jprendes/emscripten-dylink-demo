@@ -67,9 +67,9 @@ This will create a docker container with `emsdk 2.0.13`  and pull a patched vers
 * using the same heap for dynamic libraries globals.
 * support for thread local storage.
 
-Then the container will pull a copy of googletest, compile everything, and launch a local web server so that you can see the result.
+Then the container will pull a copy of googletest and compile it as a shared library `qtest.so`. Then it will compile the example tests as another shared library `string-compare.so` which depends on `gtest.so`. Finally it will compile an empty file as a main module which will generate `main.(html|js|wasm)` as well as `main.worker.js`.
 
-Once the build has finished visit [http://localhost:5000/main.html](http://localhost:5000/main.html) to see the test running in your browser. You should see the following output (up to timing differences):
+Once all modules are compiled, the container will launch a local web server so that you can see the result. You can access it by visiting [http://localhost:5000/main.html](http://localhost:5000/main.html) on your browser. You should see the following output (up to timing differences):
 
 ```
 [==========] Running 2 tests from 1 test suite.
