@@ -1,1 +1,4 @@
+title: Emscripten dynamic linking and pthread
+description: This demo shows how to build a dynamic library with pthread support in Emscripten.
+google_analytics:
 theme: jekyll-theme-cayman

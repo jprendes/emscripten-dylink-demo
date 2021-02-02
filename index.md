@@ -1,37 +1,44 @@
-## Welcome to GitHub Pages
+## Emscripten dylink and pthread demo
 
-You can use the [editor on GitHub](https://github.com/jprendes/emscripten-dylink-demo/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+This demo shows how to build a dynamic library with pthread support in [Emscripten](https://emscripten.org/).
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+First, [googletest](https://github.com/google/googletest/) is built as a dynamic library with pthread support.
 
-### Markdown
+Then an example test that dynamically links to googletest is also built as a dynamic library with pthread support. Although it is built as dynamic library this module contains the `main` entry point.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Finally, an empty file is built as Emscripten's main module, which hosts the system libraries. This main module dynamically links to the example test library.
 
-```markdown
-Syntax highlighted code block
+### Build
 
-# Header 1
-## Header 2
-### Header 3
+Run the following commands to build the demo and launch a local web server.
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+$ docker build -t emscripten-dylink .
+$ docker run --rm -it --net=host -v "$(pwd)":"/app/" emscripten-dylink
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Once the build has finished visit [http://localhost:5000/main.html](http://localhost:5000/main.html) to see the test running in your browser. You should see the following output (up to timing differences):
+```
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from StrCompare
+[ RUN      ] StrCompare.CStrEqual
+[       OK ] StrCompare.CStrEqual (614 ms)
+[ RUN      ] StrCompare.CStrNotEqual
+src/string-compare.cpp:19: Failure
+Expected equality of these values:
+  expectVal
+    Which is: "hello gtest"
+  actualValFalse
+    Which is: "hello world"
+[  FAILED  ] StrCompare.CStrNotEqual (12 ms)
+[----------] 2 tests from StrCompare (632 ms total)
 
-### Jekyll Themes
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (643 ms total)
+[  PASSED  ] 1 test.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] StrCompare.CStrNotEqual
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/jprendes/emscripten-dylink-demo/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+ 1 FAILED TEST
+```
