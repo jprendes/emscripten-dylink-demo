@@ -2,8 +2,6 @@
 
 Run threaded unit tests in the browser
 
-<span style="font-size: 0.8em">
-
 ```c++
 #include <gtest/gtest.h> // googletest header file
 #include <thread>
@@ -25,9 +23,7 @@ TEST(StrCompare, CStrNotEqual) {
 }
 ```
 
-</span>
-
-<iframe src="http://localhost:8080/build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical;"></iframe>
+<iframe src="./build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical;"></iframe>
 
 ### About
 
