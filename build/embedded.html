@@ -1,0 +1,115 @@
+<!doctypehtml>
+<html lang=en-us>
+    <head>
+        <meta charset=utf-8>
+        <meta content="text/html; charset=utf-8" http-equiv=Content-Type>
+        <title>Emscripten-Generated Code</title>
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            body {
+                font-family: arial;
+                margin: 0;
+                padding: none;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #progress-container {
+                height: 5px;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                background: #000;
+            }
+
+            #progress {
+                background: #2196f3;
+                height: 100%;
+                width: 0%;
+                flex: 0 0 auto;
+            }
+
+            #output {
+                flex: 1 1 auto;
+                width: 100%;
+                margin: 0;
+                border: 0;
+                padding-left: 0;
+                padding-right: 0;
+                display: block;
+                background-color: #000;
+                color: #fff;
+                font-family: 'Lucida Console',Monaco,monospace;
+                outline: 0;
+            }
+        </style>
+    </head>
+    <body>
+        </a>
+        <div id=progress-container><div id=progress></div></div>
+        <textarea id=output rows=8></textarea>
+        <script type='text/javascript'>
+            var progressContainerElement = document.getElementById('progress-container');
+            var progressElement = document.getElementById('progress');
+            var spinnerElement = document.getElementById('spinner');
+            var outputElement = document.getElementById('output');
+      
+            var Module = {
+              preRun: [],
+              postRun: [],
+              print: (function() {
+                if (outputElement) outputElement.value = ''; // clear browser cache
+                return function(text) {
+                  if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+                  console.log(text);
+                  if (outputElement) {
+                    outputElement.value += text + "\n";
+                    outputElement.scrollTop = outputElement.scrollHeight; // focus on bottom
+                  }
+                };
+              })(),
+              printErr: function(text) {
+                if (arguments.length > 1) text = Array.prototype.slice.call(arguments).join(' ');
+                console.error(text);
+              },
+              setStatus: function(text) {
+                if (!Module.setStatus.last) Module.setStatus.last = { time: Date.now(), text: '' };
+                if (text === Module.setStatus.last.text) return;
+                var m = text.match(/([^(]+)\((\d+(\.\d+)?)\/(\d+)\)/);
+                var now = Date.now();
+                if (m && now - Module.setStatus.last.time < 30) return; // if this is a progress update, skip it if too soon
+                Module.setStatus.last.time = now;
+                Module.setStatus.last.text = text;
+                if (m) {
+                  text = m[1];
+                  progressElement.style.width = (100 * parseInt(m[2]) / parseInt(m[4])) + "%";
+                  progressContainerElement.style.display = 'block';
+                } else {
+                  if (!text) progressElement.style.width = '0';
+                }
+                Module.print(text);
+              },
+              totalDependencies: 2,
+              monitorRunDependencies: function(left) {
+                  console.log("monitorRunDependencies", left);
+                this.totalDependencies = Math.max(this.totalDependencies, left);
+                Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+              }
+            };
+            Module.setStatus('Downloading...');
+            window.onerror = function(event) {
+              // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+              Module.setStatus('Exception thrown, see JavaScript console');
+              progressElement.style.display = 'none';
+              Module.setStatus = function(text) {
+                if (text) Module.printErr('[post-exception status] ' + text);
+              };
+            };
+        </script>
+        <script async src=main.js></script>
+    </body>
+</html>

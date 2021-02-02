@@ -1,5 +1,9 @@
 ## Emscripten dylink and pthread demo
 
+<iframe src="./build/embedded.html" style="width:100%; height: 200px; border: none;"></iframe>
+
+### About
+
 This demo shows how to build a dynamic library with pthread support in [Emscripten](https://emscripten.org/).
 
 First, [googletest](https://github.com/google/googletest/) is built as a dynamic library with pthread support.
@@ -10,7 +14,13 @@ Finally, an empty file is built as Emscripten's main module, which hosts the sys
 
 ### Build
 
-Run the following commands to build the demo and launch a local web server.
+Get the source
+
+```
+$ git clone https://github.com/jprendes/emscripten-dylink-demo.git
+```
+
+Then run the following commands to build the demo and launch it in a local web server.
 
 ```
 $ docker build -t emscripten-dylink .
@@ -18,6 +28,7 @@ $ docker run --rm -it --net=host -v "$(pwd)":"/app/" emscripten-dylink
 ```
 
 Once the build has finished visit [http://localhost:5000/main.html](http://localhost:5000/main.html) to see the test running in your browser. You should see the following output (up to timing differences):
+
 ```
 [==========] Running 2 tests from 1 test suite.
 [----------] Global test environment set-up.
