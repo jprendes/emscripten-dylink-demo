@@ -23,7 +23,7 @@ TEST(StrCompare, CStrNotEqual) {
 }
 ```
 
-<iframe src="./build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical;"></iframe>
+<iframe src="./build/embedded.html" style="width:100%; height: 23em; border: none; resize: vertical; border-radius: 0.3rem;"></iframe>
 
 ### About
 
